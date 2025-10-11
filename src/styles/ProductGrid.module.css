@@ -1,0 +1,241 @@
+.productsSection {
+  padding: 4rem 0;
+  background: #f8fafc;
+  min-height: 400px;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.productCard {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Garante que todos tenham a mesma altura */
+}
+
+.productCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.productImage {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  flex-shrink: 0; /* Impede que a imagem diminua */
+}
+
+.productCard:hover .productImage {
+  transform: scale(1.05);
+}
+
+.productContent {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Ocupa todo o espaço restante */
+}
+
+.productName {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.productDescription {
+  color: #718096;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  flex-grow: 1; /* Descrição ocupa espaço disponível */
+  min-height: 60px; /* Altura mínima para alinhar */
+}
+
+.productFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Empurra para baixo */
+  flex-shrink: 0;
+}
+
+.productPrice {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #667eea;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  flex-shrink: 0;
+}
+
+.buyButton {
+  background: linear-gradient(135deg, #48bb78, #38a169);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+  flex-shrink: 0;
+  white-space: nowrap; /* Impede quebra de texto */
+}
+
+.buyButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(72, 187, 120, 0.5);
+  background: linear-gradient(135deg, #56d187, #48bb78);
+}
+
+/* Animações */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVO CORRIGIDO */
+@media (max-width: 1024px) {
+  .productsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .productsSection {
+    padding: 2rem 0;
+  }
+  
+  .productsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .productCard {
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .productContent {
+    padding: 1.25rem;
+  }
+  
+  .productDescription {
+    min-height: 50px; /* Ajuste para mobile */
+  }
+  
+  .productFooter {
+    flex-direction: row; /* Mantém lado a lado no mobile */
+    gap: 1rem;
+  }
+  
+  .buyButton {
+    flex-shrink: 0;
+    min-width: 120px; /* Largura mínima para o botão */
+  }
+}
+
+@media (max-width: 640px) {
+  .productsGrid {
+    grid-template-columns: 1fr; /* 1 coluna - todos mesma largura */
+    gap: 1rem;
+  }
+  
+  .productCard {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto; /* Centraliza os cards */
+  }
+  
+  .productImage {
+    height: 220px; /* Altura consistente */
+  }
+  
+  .productDescription {
+    min-height: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .productsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .productCard {
+    max-width: 100%;
+  }
+  
+  .productContent {
+    padding: 1rem;
+  }
+  
+  .productName {
+    font-size: 1.1rem;
+  }
+  
+  .productPrice {
+    font-size: 1.3rem;
+  }
+  
+  .buyButton {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    min-width: 100px;
+  }
+  
+  .productFooter {
+    gap: 0.75rem;
+  }
+}
+
+/* Para garantir alinhamento perfeito em telas muito pequenas */
+@media (max-width: 360px) {
+  .productsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .productFooter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .buyButton {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .productPrice {
+    text-align: center;
+  }
+}
