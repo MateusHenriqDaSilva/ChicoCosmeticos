@@ -27,7 +27,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
   const handleConfirmOrder = (orderDetails: OrderDetails) => {
     const { product, paymentMethod, deliveryMethod, address } = orderDetails;
     
-    const whatsappNumber = "5514988068948";
+    const whatsappNumber = "14991114764";
     
     let message = `Olá! Gostaria de comprar o produto:\n\n`;
     message += `*${product.name}*\n`;
