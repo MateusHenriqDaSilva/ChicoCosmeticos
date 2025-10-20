@@ -4,14 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from '@/styles/ProductCarousel.module.css';
-import PaymentModal from './PaymentModal';
-import { Product, OrderDetails } from '@/types';
+import { Product } from '@/types';
+import { useCart } from './CartContext';
 
 const ProductCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [productsPerView, setProductsPerView] = useState(3);
+  const { addToCart, cartItems, getTotalItems } = useCart();
   
   const products: Product[] = [
     { id: 1, name: 'Porta-joias Resina', image: '/destaque1.jpg', price: 89.90, category: 'essencia', description: 'Porta-joias em resina artesanal' },
@@ -73,55 +72,27 @@ const ProductCarousel: React.FC = () => {
     }
   };
 
-  const handleBuyClick = (product: Product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
+  const handleBuyClick = (product: Product, event: React.MouseEvent) => {
+    // Adiciona ao carrinho (dispara o efeito da bola)
+    addToCart(product);
+    
+    // Cria efeito visual de confirmação no botão
+    const button = event.currentTarget as HTMLButtonElement;
+    button.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      button.style.transform = 'scale(1)';
+    }, 150);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProduct(null);
+  // Função para verificar se o produto já está no carrinho
+  const isProductInCart = (productId: number) => {
+    return cartItems.some(item => item.product.id === productId);
   };
 
-  const handleConfirmOrder = (orderDetails: OrderDetails) => {
-    const { product, paymentMethod, deliveryMethod, address } = orderDetails;
-    
-    const whatsappNumber = "14991114764";
-    
-    let message = `Olá! Gostaria de comprar o produto:\n\n`;
-    message += `*${product.name}*\n`;
-    message += `💵 *Preço:* R$ ${product.price.toFixed(2)}\n\n`;
-    
-    message += `💳 *Forma de Pagamento:*\n`;
-    switch(paymentMethod) {
-      case 'pix':
-        message += `• PIX (Pagamento instantâneo)\n`;
-        break;
-      case 'cartao':
-        message += `• Cartão de Crédito/Débito (Maquininha)\n`;
-        break;
-      case 'dinheiro':
-        message += `• Dinheiro (Pagamento na entrega)\n`;
-        break;
-    }
-    
-    message += `\n🚚 *Tipo de Entrega:*\n`;
-    if (deliveryMethod === 'retirada') {
-      message += `• Retirada no Local\n`;
-      message += `📍 Residencial Albuquerque Lins 10-54\n`;
-    } else {
-      message += `• Entrega em Domicílio\n`;
-      if (address) {
-        message += `📍 Endereço: ${address}\n`;
-      }
-    }
-    
-    message += `\nPoderia confirmar minha compra?`;
-    
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-    
-    window.open(whatsappUrl, '_blank');
+  // Função para obter a quantidade do produto no carrinho
+  const getProductQuantity = (productId: number) => {
+    const item = cartItems.find(item => item.product.id === productId);
+    return item ? item.quantity : 0;
   };
 
   return (
@@ -148,11 +119,21 @@ const ProductCarousel: React.FC = () => {
                   <div className={styles.productInfo}>
                     <h3 className={styles.productName}>{product.name}</h3>
                     <p className={styles.productPrice}>R$ {product.price.toFixed(2)}</p>
+                    
+                    {/* Indicador se o produto está no carrinho */}
+                    {isProductInCart(product.id) && (
+                      <div className={styles.cartIndicator}>
+                        <span>🛒 No carrinho: {getProductQuantity(product.id)}</span>
+                      </div>
+                    )}
+                    
                     <button 
-                      className={styles.buyButton}
-                      onClick={() => handleBuyClick(product)}
+                      className={`${styles.buyButton} ${
+                        isProductInCart(product.id) ? styles.inCart : ''
+                      }`}
+                      onClick={(e) => handleBuyClick(product, e)}
                     >
-                      Comprar
+                      {isProductInCart(product.id) ? 'Adicionar Mais' : 'Comprar'}
                     </button>
                   </div>
                 </div>
@@ -188,15 +169,6 @@ const ProductCarousel: React.FC = () => {
           ))}
         </div>
       </section>
-
-      {selectedProduct && (
-        <PaymentModal
-          product={selectedProduct}
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onConfirm={handleConfirmOrder}
-        />
-      )}
     </>
   );
 };

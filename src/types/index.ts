@@ -1,15 +1,15 @@
 export interface Product {
   id: number;
   name: string;
-  price: number;
   image: string;
-  category: 'essencia' | 'discretas' ;
+  price: number;
+  category: string;
   description: string;
 }
 
 export interface OrderDetails {
   product: Product;
-  paymentMethod: 'pix' | 'dinheiro' | 'cartao';
+  paymentMethod: 'pix' | 'cartao' | 'dinheiro';
   deliveryMethod: 'retirada' | 'entrega';
   address?: string;
 }

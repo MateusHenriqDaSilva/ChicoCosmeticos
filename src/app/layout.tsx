@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
+import { CartProvider } from '../components/CartContext';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'chicocosmeticos - Produtos Artesanais',
-  description: 'Produtos artesanais em resina, madeira e mesas',
+  title: 'Chico Cosméticos',
+  description: 'Loja de cosméticos e produtos de beleza',
 };
 
 export default function RootLayout({
@@ -13,8 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen flex flex-col">
-        {children}
+      <body className={inter.className}>
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
